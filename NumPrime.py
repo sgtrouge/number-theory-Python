@@ -1,5 +1,14 @@
-def sieveList(upper_bound = 10000000):
-    return
+def sieveList(upper_bound = 1000):
+    sieve = [];
+    isPrime = [True] * (upper_bound+1);
+    for i in range(2,upper_bound+1):
+        if isPrime[i]:
+            sieve.append(i);
+            j = i;
+            while j*i <= upper_bound:
+                isPrime[j*i] = False
+                j += 1
+    return sieve;
 
 def simpleGCD(a, b):
     # return the greatest common divisor between a and b
