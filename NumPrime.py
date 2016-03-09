@@ -1,3 +1,5 @@
+from random import randint
+
 def sieveList(upper_bound = 1000):
     sieve = [];
     isPrime = [True] * (upper_bound+1);
@@ -36,7 +38,8 @@ def euclidGcdPair(a, b):
 
 def AKSpow(a, rank, modulo = None):
     # return a^rank, optionally % modulo
-    # TODO: if modulo is a prime, then negative rank is acceptable
+    if (rank == 0):
+        return 1;
     temp = AKSpow(a, rank/2, modulo);
     if (modulo != None):
         temp = (temp * temp) % modulo;
@@ -51,7 +54,6 @@ def AKSpow(a, rank, modulo = None):
         else:
             return (temp * a)
 
-
 def euclidInverse(a, modulo):
     # return inverse of a, based on module, using the Euclid Extended Method
     [x, y] = euclidGcdPair(a, modulo);
@@ -61,3 +63,28 @@ def FLTmodInverse(a, modulo):
     # based on Fermat's little theorem
     # currently require modulo to be a prime number
     return AKSpow(a, modulo-2, modulo)
+
+#---------------------------Prime-Testing--------------------------------------#
+def isPrime(n, type = 'non-det'):
+    if (type == 'non-det'):
+        return RMTest(n);
+
+def RMTest(n):
+    if ((n > 2) and (n % 2 == 0)):
+        return False;
+    t = n-1;
+    s = 0;
+    while (t % 2 == 0):
+        t = t/2;
+        s = s+1;
+    for rep in range(1, 10):
+        x = randint(1, n-1);
+        if (AKSpow(x, n-1, n) != 1): # according to FLT
+            return False;
+        mui = 1;
+        for i in range (1,s+1):
+            mui = mui*2;
+            tmp = AKSpow(x, mui/2, n);
+            if ((AKSpow(x, mui, n) == 1) and (tmp != 1) and (tmp != n-1)):
+                return False;
+    return True;
